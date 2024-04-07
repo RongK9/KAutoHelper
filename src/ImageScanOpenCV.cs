@@ -51,8 +51,8 @@ namespace KAutoHelper
             {
                 try
                 {
-                    Image<Bgr, byte> source = new Image<Bgr, byte>(mainBitmap);
-                    Image<Bgr, byte> template = new Image<Bgr, byte>(subBitmap);
+                    Image<Bgr, byte> source = mainBitmap.ToImage<Bgr, byte>();
+                    Image<Bgr, byte> template = subBitmap.ToImage<Bgr, byte>();
                     Image<Bgr, byte> imageToShow = source.Copy();
 
                     using (Image<Gray, float> result = source.MatchTemplate(template, Emgu.CV.CvEnum.TemplateMatchingType.CcoeffNormed))
@@ -100,8 +100,8 @@ namespace KAutoHelper
             {
                 try
                 {
-                    Image<Bgr, byte> source = new Image<Bgr, byte>(mainBitmap);
-                    Image<Bgr, byte> template = new Image<Bgr, byte>(subBitmap);
+                    Image<Bgr, byte> source = mainBitmap.ToImage<Bgr, byte>();
+                    Image<Bgr, byte> template = subBitmap.ToImage<Bgr, byte>();
 
                     using (Image<Gray, float> result = source.MatchTemplate(template, Emgu.CV.CvEnum.TemplateMatchingType.CcoeffNormed))
                     {
@@ -133,8 +133,8 @@ namespace KAutoHelper
             {
                 try
                 {
-                    Image<Bgr, byte> source = new Image<Bgr, byte>(mainBitmap);
-                    Image<Bgr, byte> template = new Image<Bgr, byte>(subBitmap);
+                    Image<Bgr, byte> source = mainBitmap.ToImage<Bgr, byte>();
+                    Image<Bgr, byte> template = subBitmap.ToImage<Bgr, byte>();
 
                     while (true)
                     {
@@ -210,7 +210,7 @@ namespace KAutoHelper
             while (true)
             {
 
-                Image<Gray, byte> imgOld = new Image<Gray, byte>(bmp);
+                Image<Gray, byte> imgOld = bmp.ToImage<Gray, byte>();
                 imgOld.Save("old.png");
                 Image<Gray, byte> img2 = (new Image<Gray, byte>(imgOld.Width, imgOld.Height, new Gray(255))).Sub(imgOld);
                 img2.Save("img23.png");
@@ -234,13 +234,13 @@ namespace KAutoHelper
                 }
                 //return skel.Bitmap;
 
-                skel.Bitmap.Save("ele.png");
+                skel.ToBitmap().Save("ele.png");
                 img2.Save("img2.png");
                 eroded.Save("eroded.png");
                 temp.Save("temp.png");
-              }
+            }
         }
-        
+
 
         /// <summary>
         /// Đọc chữ từ hình
@@ -262,7 +262,7 @@ namespace KAutoHelper
             foreach (var item in dir.GetFiles())
             {
                 Bitmap Bm_image_sour = new Bitmap(item.FullName);
-                Bitmap image_new = Get_Text_From_Image.make_new_image(new Image<Gray, byte>(Bm_image_sour).ToBitmap());
+                Bitmap image_new = Get_Text_From_Image.make_new_image(Bm_image_sour.ToImage<Gray, byte>().ToBitmap());
                 Bm_image_sour.Dispose();
 
                 int cout_picture = Get_Text_From_Image.split_image(image_new, Path.GetFileNameWithoutExtension(item.Name));
@@ -271,7 +271,7 @@ namespace KAutoHelper
 
         public static Bitmap ThreshHoldBinary(Bitmap bmp, byte threshold = 190)
         {
-            Image<Gray, Byte> img = new Image<Gray, Byte>(bmp);
+            Image<Gray, Byte> img = bmp.ToImage<Gray, Byte>();
 
             var bmp1 = img.ThresholdBinary(new Gray(threshold), new Gray(255));
 
@@ -344,7 +344,7 @@ namespace KAutoHelper
 
             try
             {
-                Image<Bgr, byte> imgInput = new Image<Bgr, byte>(img);
+                Image<Bgr, byte> imgInput = img.ToImage<Bgr, byte>();
 
                 var temp = imgInput.SmoothGaussian(5).Convert<Gray, byte>().ThresholdBinaryInv(new Gray(10), new Gray(255));
                 //temp.Save("bbb.png");
@@ -406,7 +406,7 @@ namespace KAutoHelper
                     }
 
                 }
-                return imgInput.Bitmap;
+                return imgInput.ToBitmap();
             }
             catch (Exception ex)
             {
@@ -482,7 +482,7 @@ namespace KAutoHelper
                     {
                         Color color = Bm_image_sour.GetPixel(i, j);
 
-                       if (Check_sailenh_Color(color, TemplateColors, saisot))
+                        if (Check_sailenh_Color(color, TemplateColors, saisot))
                         {
                             try
                             {
@@ -501,8 +501,8 @@ namespace KAutoHelper
 
                 foreach (var item in templateColor)
                 {
-                    if ((indexColor.R + sailech >= item.R && indexColor.R - sailech <= item.R) 
-                        && (indexColor.G + sailech >= item.G && indexColor.G - sailech <= item.G) 
+                    if ((indexColor.R + sailech >= item.R && indexColor.R - sailech <= item.R)
+                        && (indexColor.G + sailech >= item.G && indexColor.G - sailech <= item.G)
                         && (indexColor.B + sailech >= item.B && indexColor.B - sailech <= item.B))
                     {
                         result = true;
@@ -594,7 +594,7 @@ namespace KAutoHelper
                 image_split.Dispose();
             }
 
-            
+
             return cout_picture;
         }
 
@@ -602,7 +602,7 @@ namespace KAutoHelper
         protected static string Get_Text(int cout_picture)
         {
             string text = "";
-            List<string> character = new List<string>() { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"};
+            List<string> character = new List<string>() { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" };
             for (int i = 0; i < cout_picture; i++)
             {
                 List<double> ketqua = new List<double>();
@@ -620,7 +620,7 @@ namespace KAutoHelper
                             string path_image_standate = item.FullName;
                             Bitmap standand = new Bitmap(path_image_standate);
 
-                            string path_image = TempFolder +@"\" + i + ".jpg";
+                            string path_image = TempFolder + @"\" + i + ".jpg";
                             Bitmap main = new Bitmap(path_image);
                             currentMax = Image_Equal(main, standand);
                             standand.Dispose();
@@ -648,7 +648,7 @@ namespace KAutoHelper
                     }
                 }
 
-                text+= character[index_max_trung];
+                text += character[index_max_trung];
             }
             return text;
         }
