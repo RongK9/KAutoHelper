@@ -101,7 +101,6 @@
     <Compile Include="CaptureHelper.cs" />
     <Compile Include="EnumHelper.cs" />
     <Compile Include="ImageScanOpenCV.cs" />
-    <Compile Include="LDPlayer.cs" />
     <Compile Include="MemoryHelper.cs" />
     <Compile Include="ProcessHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
